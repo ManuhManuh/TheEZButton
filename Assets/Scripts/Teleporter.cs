@@ -85,7 +85,7 @@ public class Teleporter : MonoBehaviour
 
     private bool IsValidTeleportTarget(GameObject gameObject)
     {
-        return !(gameObject.layer == invalidTargetLayer);
+        return gameObject.CompareTag("ValidTeleportTarget");
     }
 
     private void SetBeamVisible(bool visible)

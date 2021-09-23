@@ -22,10 +22,8 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        // Are there any other game managers yet?
         if (instance != null)
         {
-            // Error
             Debug.LogError("There was more than 1 Sound Manager");
         }
         else
@@ -35,6 +33,7 @@ public class SoundManager : MonoBehaviour
 
         currentAudioSource = audioSourceA;
     }
+
 
     private void Update()
     {

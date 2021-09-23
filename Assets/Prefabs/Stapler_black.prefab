@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3132931924890546069}
   m_Layer: 0
   m_Name: Stapler_black
-  m_TagString: Untagged
+  m_TagString: OfficeSupplies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

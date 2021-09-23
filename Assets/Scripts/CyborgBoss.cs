@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class CyborgBoss : MonoBehaviour
 {
-    public EasyButton game;
+    //public EasyButton game;
     public float speed;
     public float allowableIdleTime;
 
     private bool walking;
     private float idleTimer;
     private float timeIdle;
+    private AudioClip[] bossResponses;
     
 
     private void Start()
     {
         idleTimer = Time.time;
+        bossResponses = SoundManager.instance.audioClips;
+        
     }
     private void Update()
     {
@@ -44,48 +47,76 @@ public class CyborgBoss : MonoBehaviour
         if (other.gameObject.name != "Ground")
         {
             // Reset the idle timer (consecutive random idle returns from hits are not counted toward total idle time)
-            
 
-            // Let the game know that the cyborg was hit
-            game.OnCyborgHit();
+
+            // Generate sound effects
+            GenerateSoundFX(other.gameObject);
 
             // If the fence or an obstacle was hit, make the rotation 180 degrees instead of 90
             int rotationMultiplier = other.gameObject.CompareTag("TurnAround") ? 2 : 1;
+            TakeAction(rotationMultiplier);
+        }
+    }
 
-            // Generate random action
-            int action = Random.Range(0, 5);
+    private void GenerateSoundFX(GameObject item)
+    {
+        if (item.CompareTag("OfficeSupplies"))
+        {
+            string nameStart = item.name.Substring(0, 6);
+            string clipToPlay;
 
-            // Set walking parameter and do any required rotation (depending on random value generated)
-            switch (action)
+            if (nameStart == "Sticky")
             {
-                case 0:         // Stop walking
-                    walking = false;
-                    if (rotationMultiplier == 2)
-                    {
-                        // Turn around so walking is possible again if hit by office supplies
-                        transform.Rotate(0, 180, 0);
-                    }
-                    break;
-                case 1:         // Turn 90 degrees right (or 180 if the fence was hit)
-                case 2:
-                    transform.Rotate(0, rotationMultiplier * 90, 0);
-                    walking = true;
-                    break;
-                case 3:         // turn 90 degrees left (or 180 if the fence was hit)
-                case 4:
-                    transform.Rotate(0, rotationMultiplier * -90, 0);
-                    walking = true;
-                    break;
-                default:
-                    break;
+                // Play the sticky clip
+                clipToPlay = "Sticky";
+            }
+            else
+            {
+                //Figure out which clip to play
+                AudioClip randomClip = bossResponses[Random.Range(0, bossResponses.Length - 1)];
+                clipToPlay = randomClip.name;
             }
 
-            // Change the animation parameter
-            GetComponent<Animator>().SetBool("Walking", walking);
-            if (!walking)
-            {
-                idleTimer = Time.time;
-            }
+            // Play the sound clip
+            SoundManager.PlaySound(gameObject, clipToPlay);
+        }
+    }
+
+    private void TakeAction(int rotationMultiplier)
+    {
+        // Generate random action
+        int action = Random.Range(0, 5);
+
+        // Set walking parameter and do any required rotation (depending on random value generated)
+        switch (action)
+        {
+            case 0:         // Stop walking
+                walking = false;
+                if (rotationMultiplier == 2)
+                {
+                    // Turn around so walking is possible again if hit by office supplies
+                    transform.Rotate(0, 180, 0);
+                }
+                break;
+            case 1:         // Turn 90 degrees right (or 180 if the fence was hit)
+            case 2:
+                transform.Rotate(0, rotationMultiplier * 90, 0);
+                walking = true;
+                break;
+            case 3:         // turn 90 degrees left (or 180 if the fence was hit)
+            case 4:
+                transform.Rotate(0, rotationMultiplier * -90, 0);
+                walking = true;
+                break;
+            default:
+                break;
+        }
+
+        // Change the animation parameter
+        GetComponent<Animator>().SetBool("Walking", walking);
+        if (!walking)
+        {
+            idleTimer = Time.time;
         }
     }
     

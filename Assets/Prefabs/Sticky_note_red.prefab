@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -3202394493443047265}
   m_Layer: 0
   m_Name: Sticky_note_red
-  m_TagString: Untagged
+  m_TagString: OfficeSupplies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 6547508802625595371}
   - component: {fileID: 3328652232045669485}
   - component: {fileID: 7105751431751246068}
+  - component: {fileID: 1026554227171379161}
   m_Layer: 0
   m_Name: Legal_pad
-  m_TagString: Untagged
+  m_TagString: OfficeSupplies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,3 +125,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectLifeSpan: 10
+--- !u!65 &1026554227171379161
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295664409441299684}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.32512486, y: 0.023593597, z: 0.4512201}
+  m_Center: {x: -0.0005814582, y: 0.011748496, z: 0.010393836}

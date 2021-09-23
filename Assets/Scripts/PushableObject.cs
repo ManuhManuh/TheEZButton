@@ -12,15 +12,12 @@ public class PushableObject : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log($"Trigger entered: {other.name}");
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             // Move the button to the pushed position
             objectMesh.position = pushedPostion.position;
 
-            // Play the button click sound
-            SoundManager.PlaySound(gameObject, "WallButtonClick");
-
-            // Perform the action that the button is supposed to control
+            // Perform any required action(s) that the button is supposed to control
             controlledObject.OnPressed();
 
         }
@@ -29,16 +26,13 @@ public class PushableObject : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         //Debug.Log($"Trigger exited: {other.name}");
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             // Return the button to the original position
             objectMesh.localPosition = Vector3.zero;
 
-            // Play the button click sound
-            SoundManager.PlaySound(gameObject, "WallButtonClick");
-
-            // Perform the action that releasing the button is supposed to control
-            controlledObject.OnPressed();
+            // Perform any required action(s) that releasing the button is supposed to control
+            controlledObject.OnReleased();
 
         }
     }
