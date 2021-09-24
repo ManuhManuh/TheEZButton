@@ -7,18 +7,24 @@ public class CyborgBoss : MonoBehaviour
     //public EasyButton game;
     public float speed;
     public float allowableIdleTime;
+    public ParticleSystem fireParticle;
+    public float takeOffForce;
+    public int bossDemiseThreshold;
 
     private bool walking;
     private float idleTimer;
     private float timeIdle;
     private AudioClip[] bossResponses;
-    
+    private int stickyCount;
+    private bool bossRising;
+    private Rigidbody boss;
 
     private void Start()
     {
         idleTimer = Time.time;
         bossResponses = SoundManager.instance.audioClips;
-        
+        stickyCount = 0;
+        boss = gameObject.GetComponent<Rigidbody>();
     }
     private void Update()
     {
@@ -38,7 +44,22 @@ public class CyborgBoss : MonoBehaviour
                 Application.Quit();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            BossTakesOff();
+        }
+
+        if (bossRising)
+        {
+            boss.AddForce(Vector3.up * takeOffForce, ForceMode.Impulse);
+        }
         
+        if (transform.position.y > bossDemiseThreshold)
+        {
+            SoundManager.PlaySound(gameObject, "Ah");
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -48,7 +69,16 @@ public class CyborgBoss : MonoBehaviour
         {
             // Reset the idle timer (consecutive random idle returns from hits are not counted toward total idle time)
 
+            string nameStart = other.gameObject.name.Substring(0, 6);
+            if (nameStart == "Sticky")
+            {
+                stickyCount++;
 
+                if (stickyCount > 10)
+                {
+                    BossTakesOff();
+                }
+            }
             // Generate sound effects
             GenerateSoundFX(other.gameObject);
 
@@ -69,11 +99,12 @@ public class CyborgBoss : MonoBehaviour
             {
                 // Play the sticky clip
                 clipToPlay = "Sticky";
+                stickyCount++;
             }
             else
             {
-                //Figure out which clip to play
-                AudioClip randomClip = bossResponses[Random.Range(0, bossResponses.Length - 1)];
+                //Figure out which clip to play: do not include 0, as this is the clip for the end scenario
+                AudioClip randomClip = bossResponses[Random.Range(1, bossResponses.Length - 1)];
                 clipToPlay = randomClip.name;
             }
 
@@ -118,6 +149,13 @@ public class CyborgBoss : MonoBehaviour
         {
             idleTimer = Time.time;
         }
+    }
+
+    private void BossTakesOff()
+    {
+        SoundManager.PlaySound(gameObject, "Ah");
+        fireParticle.Play();
+        bossRising = true;
     }
     
 }
